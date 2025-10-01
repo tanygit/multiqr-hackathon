@@ -1,21 +1,36 @@
+import subprocess
 import os
-import argparse
 
-def parse_opt():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data', type=str, default='data/demo_images/', help='dataset folder')
-    parser.add_argument('--weights', type=str, default='yolov9/yolov9-s.pt', help='initial weights')
-    parser.add_argument('--cfg', type=str, default='yolov9/models/detect/custom-yolov9-s.yaml')
-    parser.add_argument('--batch', type=int, default=8)
-    parser.add_argument('--epochs', type=int, default=100)
-    return parser.parse_args()
+def train_model():
+   
+    print("Starting YOLOv9 training...")
 
-def main():
-    opt = parse_opt()
-    os.chdir('yolov9')
-    os.system(f'python train_dual.py --batch {opt.batch} --cfg {opt.cfg} '
-              f'--epochs {opt.epochs} --data {opt.data} --weights {opt.weights} '
-              f'--hyp data/hyps/hyp.scratch-high.yaml --device 0')
+    yolov9_path = os.path.join("src", "yolov9")
+    train_script_path = os.path.join(yolov9_path, "train_dual.py")
+    cfg_path = os.path.join(yolov9_path, "models", "detect", "custom-yolov9-s.yaml")
+    data_path = os.path.join(yolov9_path, "data", "custom.yaml")
+    hyp_path = os.path.join(yolov9_path, "data", "hyps", "hyp.scratch-high.yaml")
+    weights_path = os.path.join(yolov9_path, "yolov9-s.pt")
+
+    command = [
+        "python", train_script_path,
+        "--batch", "8",
+        "--cfg", cfg_path,
+        "--epochs", "100",
+        "--data", data_path,
+        "--hyp", hyp_path,
+        "--weights", weights_path,
+        "--device", "0"
+    ]
+
+    try:
+        subprocess.run(command, check=True)
+        print("Training completed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred during training: {e}")
+    except FileNotFoundError:
+        print(f"Error: Could not find the training script at {train_script_path}.")
+        print("Please ensure you have cloned the yolov9 repository into the 'src' directory.")
 
 if __name__ == "__main__":
-    main()
+    train_model()

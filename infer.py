@@ -1,60 +1,104 @@
+import subprocess
 import os
 import glob
 import json
 import cv2
 import argparse
+from pathlib import Path
 
-def parse_opt():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--input', type=str, required=True, help='input folder with images')
-    parser.add_argument('--output', type=str, required=True, help='output JSON file')
-    parser.add_argument('--weights', type=str, default='yolov9/runs/train/exp/weights/best.pt')
-    return parser.parse_args()
+def run_inference(input_folder, weights_path):
 
-def run_inference(input_folder, output_json, weights):
-    os.chdir('yolov9')
-    os.system(f'python detect_dual.py --weights {weights} --source {input_folder} '
-              f'--save-txt --save-conf --project ../yolov9/runs/detect --name exp_test_images --exist-ok')
+    print(f"Running inference on images in: {input_folder}")
     
-    pred_folder = '../yolov9/runs/detect/exp_test_images/labels'
+    yolov9_path = os.path.join("src", "yolov9")
+    detect_script_path = os.path.join(yolov9_path, "detect_dual.py")
+    
+    project_path = os.path.join(yolov9_path, "runs", "detect")
+    
+    command = [
+        "python", detect_script_path,
+        "--weights", weights_path,
+        "--source", input_folder,
+        "--project", project_path,
+        "--name", "exp",
+        "--exist-ok",
+        "--save-txt",
+        "--save-conf",
+        "--device", "0"
+    ]
+    
+    try:
+        subprocess.run(command, check=True)
+        labels_path = os.path.join(project_path, "exp", "labels")
+        print(f"Detection complete. Labels saved to: {labels_path}")
+        return labels_path
+    except Exception as e:
+        print(f"An error occurred during YOLOv9 detection: {e}")
+        return None
+
+def convert_to_json(labels_folder, images_folder, output_json_path):
+
+    print("Converting detection results to submission JSON format...")
     submission_list = []
 
-    for txt_file in sorted(glob.glob(os.path.join(pred_folder, '*.txt'))):
-        image_id = os.path.splitext(os.path.basename(txt_file))[0]
-        img_path = os.path.join(input_folder, image_id + '.jpg')
-        img = cv2.imread(img_path)
-        h, w = img.shape[:2]
+    image_files = sorted(glob.glob(os.path.join(images_folder, '*.jpg')))
 
+    for img_path in image_files:
+        image_id = Path(img_path).stem
+        txt_file = os.path.join(labels_folder, f"{image_id}.txt")
+        
+        h, w = cv2.imread(img_path).shape[:2]
         qrs_list = []
-        with open(txt_file, 'r') as f:
-            lines = f.read().strip().split('\n')
-            for line in lines:
-                if line == '':
-                    continue
-                parts = line.split()
-                if len(parts) < 6:
-                    continue
-                x_center, y_center, width, height, conf = map(float, parts[1:6])
-                if conf < 0.5:
-                    continue
-                x_center *= w
-                y_center *= h
-                width *= w
-                height *= h
-                x_min = x_center - width / 2
-                y_min = y_center - height / 2
-                x_max = x_center + width / 2
-                y_max = y_center + height / 2
-                qrs_list.append({"bbox": [x_min, y_min, x_max, y_max]})
+
+        if os.path.exists(txt_file):
+            with open(txt_file, 'r') as f:
+                lines = f.read().strip().split('\n')
+                for line in lines:
+                    if not line:
+                        continue
+                    
+                    parts = line.split()
+                    x_center, y_center, width, height, conf = map(float, parts[1:6])
+
+                    x_center_abs = x_center * w
+                    y_center_abs = y_center * h
+                    width_abs = width * w
+                    height_abs = height * h
+
+                    x_min = x_center_abs - width_abs / 2
+                    y_min = y_center_abs - height_abs / 2
+                    x_max = x_center_abs + width_abs / 2
+                    y_max = y_center_abs + height_abs / 2
+                    
+                    qrs_list.append({"bbox": [x_min, y_min, x_max, y_max]})
+
         submission_list.append({"image_id": image_id, "qrs": qrs_list})
 
-    with open(output_json, 'w') as f:
+    with open(output_json_path, 'w') as f:
         json.dump(submission_list, f, indent=4)
-    print(f"Submission JSON saved at: {output_json}")
+        
+    print(f"Submission JSON saved successfully at: {output_json_path}")
 
-def main():
-    opt = parse_opt()
-    run_inference(opt.input, opt.output, opt.weights)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Run inference and generate submission file.")
+    parser.add_argument('--input', type=str, required=True, help='Path to the input folder of images.')
+    parser.add_argument('--output', type=str, required=True, help='Path to save the output submission.json file.')
+    
+    parser.add_argument(
+        '--weights', 
+        type=str, 
+        default="src/yolov9/runs/train/exp/weights/best.pt", 
+        help='Path to the trained model weights (.pt file).'
+    )
+    
+    args = parser.parse_args()
+
+    if not os.path.exists(args.weights):
+        print(f"Error: Weights file not found at {args.weights}")
+        print("Please train the model first using 'python train.py' or provide a valid path.")
+    else:
+        labels_output_folder = run_inference(args.input, args.weights)
+        
+        if labels_output_folder:
+            convert_to_json(labels_output_folder, args.input, args.output)

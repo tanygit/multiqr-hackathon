@@ -1,0 +1,9 @@
+train: /content/drive/MyDrive/MultiQR_Hackathon/QR_Dataset/train.txt
+val: /content/drive/MyDrive/MultiQR_Hackathon/QR_Dataset/val.txt
+
+# number of classes
+nc: 1
+
+# class names
+names: 
+  0: QR
