@@ -42,8 +42,19 @@ The inference script requires you to specify the input image folder, the output 
 python infer.py --input <path_to_images_folder> --output <path_to_save_json> --weights <path_to_model.pt>
 ```
 ---
+---
 
-## 3. Steps for re-training the model
+## 3. Running via Notebooks 
+
+If you face issues running the provided scripts, you can use the development notebooks directly:
+
+- **`notebooks/Multi_QR_PreTraining.ipynb`** – Covers initial setup and dataset preparation.  
+- **`notebooks/Multi_QR_Training.ipynb`** – Contains step-by-step code for training and inference.  
+
+- Simply open these notebooks in Jupyter or Google Colab and run the cells in order. This provides the same functionality as the scripts but in a more interactive way.
+---
+
+## 4. Steps for re-training the model
 
 ### A. Data Preparation
 
@@ -87,7 +98,7 @@ python infer.py --input <path_to_images_folder> --output <path_to_save_json> --w
 
 ---
 
-## 4. Example Inference Results
+## 5. Example Inference Results
 
 sample results of QR code detection using the provided demo images:
 
