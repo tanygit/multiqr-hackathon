@@ -59,7 +59,10 @@ def convert_to_json(labels_folder, images_folder, output_json_path):
                     
                     parts = line.split()
                     x_center, y_center, width, height, conf = map(float, parts[1:6])
-
+                    
+                     if conf < 0.56:
+                         continue
+                         
                     x_center_abs = x_center * w
                     y_center_abs = y_center * h
                     width_abs = width * w
