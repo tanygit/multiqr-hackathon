@@ -2,7 +2,7 @@
 
 This repository contains the complete code for a multi-QR code detection model, submitted for the MultiQR Hackathon. The solution is built upon the YOLOv9 object detection framework and includes a pre-trained model for immediate inference.
 
-* The `outputs/` directory contains the `submission_detection_1.json` file, which has the detection results on the provided `test_images`.
+* The `outputs/` directory contains the `submission_detection_1.json` file, which has the detection results on the provided `test_images` in which it includes bounding boxes with confidence more than 0.55
 ---
 
 ## 1. Setup Instructions
