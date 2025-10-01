@@ -84,3 +84,14 @@ python infer.py --input <path_to_images_folder> --output <path_to_save_json> --w
     python train.py
     ```
     You can then use the new `best.pt` weights of the model for inference as specified in `Step 2. How To run Inference`
+
+---
+
+## 4. Example Inference Results
+
+sample results of QR code detection using the provided demo images:
+
+| **Original Demo Image** | **Detection Output** |
+|--------------------------|-----------------------|
+| <img src="data/demo_images/img203.jpg"> | <img src="data/inference_demo_images/img203.jpg"> |
+| ![Demo Input](data/demo_images/img202.jpg) | ![Detection Output](data/inference_demo_images/img202.jpg) |
