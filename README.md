@@ -32,7 +32,7 @@ Follow these steps to set up the environment and prepare the project.
 
 ---
 
-## 2. How to Run Inference (Using the Provided Trained Model)
+## 2. How to Run Inference 
 
 A pre-trained `best.pt` model is included in the `trained_models/` directory. You can use it directly to generate predictions.
 
