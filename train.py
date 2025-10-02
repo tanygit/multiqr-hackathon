@@ -5,10 +5,10 @@ def train_model():
    
     print("Starting YOLOv9 training...")
 
-    yolov9_path = os.path.join("src", "yolov9")
+    yolov9_path = os.path.join("src","yolov9")
     train_script_path = os.path.join(yolov9_path, "train_dual.py")
-    cfg_path = os.path.join(yolov9_path, "models", "detect", "custom-yolov9-s.yaml")
-    data_path = os.path.join(yolov9_path, "data", "custom.yaml")
+    cfg_path = os.path.join("src", "models", "detect", "custom-yolov9-s.yaml")
+    data_path = os.path.join("src", "data", "custom.yaml")
     hyp_path = os.path.join(yolov9_path, "data", "hyps", "hyp.scratch-high.yaml")
     weights_path = os.path.join(yolov9_path, "yolov9-s.pt")
 
@@ -16,7 +16,7 @@ def train_model():
         "python", train_script_path,
         "--batch", "8",
         "--cfg", cfg_path,
-        "--epochs", "100",
+        "--epochs", "2",
         "--data", data_path,
         "--hyp", hyp_path,
         "--weights", weights_path,
