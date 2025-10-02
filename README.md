@@ -3,6 +3,12 @@
 This repository contains the complete code submitted for the Multi-QR Detection Hackathon. The solution is built upon the YOLOv9 object detection framework and includes a model weights trained on QR dataset provided in the hackathon for immediate inference.
 
 * The `outputs/` directory contains the `submission_detection_1.json` file, which has the detection results on the provided `test_images` in which it includes bounding boxes with confidence more than 0.55
+  
+## Dataset Preparation
+
+- The dataset provided in the hackathon was split into **training**(160) and **validation**(40) 
+- **Annotations** for bounding boxes were created using the [LabelImg](https://pypi.org/project/labelImg/) tool.  
+- All annotations were saved in **YOLO format** (`.txt` files), which is directly compatible with YOLOv9.  
 ---
 
 ## 1. Setup Instructions
