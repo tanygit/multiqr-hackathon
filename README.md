@@ -7,7 +7,7 @@ This repository contains the complete code submitted for the Multi-QR Detection 
 ## Dataset Preparation
 
 - The dataset provided in the hackathon was split into **training**(160) and **validation**(40) 
-- **Annotations** for bounding boxes were created using the [LabelImg](https://pypi.org/project/labelImg/) tool.  
+- Bounding Box Annotations were done using the [LabelImg](https://pypi.org/project/labelImg/) tool.  
 - All annotations were saved in **YOLO format** (`.txt` files), which is directly compatible with YOLOv9.
 - Structure of the folder used for training
     ```bash
