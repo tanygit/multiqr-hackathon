@@ -30,9 +30,9 @@ Follow these steps to set up the environment and prepare the project.
 
 ### Installation Steps
 
-1.  **Clone this Submission Repository:**
+1.  **Clone this Repository:**
     ```bash
-    git clone <your-github-repo-url>
+    git clone https://github.com/tanygit/multiqr-hackathon.git
     cd multiqr-hackathon
     ```
 
@@ -116,8 +116,10 @@ If you face issues running the provided scripts, you can use the development not
     python train.py
     ```
     You can then use the new `best.pt` weights of the model for inference as specified in `Step 2. How To run Inference`
+
+    - **Note:** To change the number of epochs or the batch size, you need to edit the `train.py` file directly. The default values are 100 epochs and a batch size of 8.
     
-3.  **Patch for PyTorch Compatibility:**
+4.  **Patch for PyTorch Compatibility:**
    
      > **Note:** Run this step *only if you encounter a `torch.load` error*
    
