@@ -52,7 +52,7 @@ python infer.py --input <path_to_images_folder> --output <path_to_save_json> --w
 Apply the following patch to fix the `torch.load` error related to `map_location`:
 
 ```bash
-!sed -i "s/map_location='cpu')/map_location='cpu', weights_only=False)/" /content/multiqr-hackathon/src/yolov9/models/experimental.py
+sed -i "s/map_location='cpu')/map_location='cpu', weights_only=False)/" /content/multiqr-hackathon/src/yolov9/models/experimental.py
 ```
 ---
 
@@ -108,11 +108,11 @@ If you face issues running the provided scripts, you can use the development not
     Run the following commands before starting training to fix `torch.load` compatibility issues:
 
     ```bash
-    !sed -i "s/torch.load(weights, map_location='cpu')/torch.load(weights, map_location='cpu', weights_only=False)/" src/yolov9/train_dual.py
+    sed -i "s/torch.load(weights, map_location='cpu')/torch.load(weights, map_location='cpu', weights_only=False)/" src/yolov9/train_dual.py
 
-    !sed -i "s/torch.load(attempt_download(w), map_location='cpu')/torch.load(attempt_download(w), map_location='cpu', weights_only=False)/" src/yolov9/models/experimental.py
+    sed -i "s/torch.load(attempt_download(w), map_location='cpu')/torch.load(attempt_download(w), map_location='cpu', weights_only=False)/" src/yolov9/models/experimental.py
 
-    !sed -i "s/torch.load(f, map_location=torch.device('cpu'))/torch.load(f, map_location=torch.device('cpu'), weights_only=False)/" src/yolov9/utils/general.py
+    sed -i "s/torch.load(f, map_location=torch.device('cpu'))/torch.load(f, map_location=torch.device('cpu'), weights_only=False)/" src/yolov9/utils/general.py
     ```
 ---
 
