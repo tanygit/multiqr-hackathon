@@ -16,7 +16,7 @@ def train_model():
         "python", train_script_path,
         "--batch", "8",
         "--cfg", cfg_path,
-        "--epochs", "2",
+        "--epochs", "100",
         "--data", data_path,
         "--hyp", hyp_path,
         "--weights", weights_path,
