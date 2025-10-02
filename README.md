@@ -71,22 +71,18 @@ If you face issues running the provided scripts, you can use the development not
 
 ### A. Data Preparation
 
-1.  **Place Your Dataset:**
-    Place your dataset (e.g., `QR_Dataset`) in the root of this project directory.
-    > **Note:** The bounding box annotations for the training and validation images were created using the **LabelImg** tool and are saved in the required YOLO `.txt` format.
-
-2.  **Generate File Lists:**
+1.  **Generate File Lists:**
     Run the utility script to create `train.txt` and `val.txt`. These files contain absolute paths to your images, which YOLOv9 requires.
     ```bash
-    python src/utils/prepare_data.py --path ./QR_Dataset
+    python src/utils/prepare_data.py --path <path_to_dataset_folder>
     ```
 
-3.  **Configure the Dataset YAML:**
+2.  **Configure the Dataset YAML:**
     You must tell YOLOv9 where to find your data. Open the `src/yolov9/data/custom.yaml` file and ensure it looks like this. The `prepare_data.py` script will print the absolute paths you need to use.
 
     ```yaml
-    train: /path/to/your/multiqr-hackathon/QR_Dataset/train.txt
-    val: /path/to/your/multiqr-hackathon/QR_Dataset/val.txt
+    train: /path/to/your/dataset/train.txt
+    val: /path/to/your/dataset/val.txt
     
     # Number of classes
     nc: 1
@@ -108,12 +104,22 @@ If you face issues running the provided scripts, you can use the development not
     python train.py
     ```
     You can then use the new `best.pt` weights of the model for inference as specified in `Step 2. How To run Inference`
+    
+3.  **Patch for PyTorch Compatibility:**  
+    Run the following commands before starting training to fix `torch.load` compatibility issues:
 
+    ```bash
+    !sed -i "s/torch.load(weights, map_location='cpu')/torch.load(weights, map_location='cpu', weights_only=False)/" src/yolov9/train_dual.py
+
+    !sed -i "s/torch.load(attempt_download(w), map_location='cpu')/torch.load(attempt_download(w), map_location='cpu', weights_only=False)/" src/yolov9/models/experimental.py
+
+    !sed -i "s/torch.load(f, map_location=torch.device('cpu'))/torch.load(f, map_location=torch.device('cpu'), weights_only=False)/" src/yolov9/utils/general.py
+    ```
 ---
 
 ## 5. Example Inference Results
 
-sample results of QR code detection using the provided demo images:
+Sample results of QR code detection using the provided demo images:
 
 | **Original Demo Image** | **Detection Output** |
 |--------------------------|-----------------------|
