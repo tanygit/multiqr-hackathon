@@ -40,7 +40,7 @@ Follow these steps to set up the environment and prepare the project.
 
 ## 2. How to Run Inference 
 
-A pre-trained `best.pt` model is included in the `trained_models/` directory. You can use it directly to generate predictions.
+A pre-trained `best.pt` model is included in the `trained_model/` directory. You can use it directly to generate predictions.
 
 The inference script requires to specify the input image folder, the output JSON path, and the path to the model weights.
 
@@ -48,8 +48,9 @@ The inference script requires to specify the input image folder, the output JSON
 python infer.py --input <path_to_images_folder> --output <path_to_save_json> --weights <path_to_model.pt>
 ```
 
-### Important Note
-Apply the following patch to fix the `torch.load` error related to `map_location`:
+### Apply Patch for PyTorch Compatibility
+
+ > **Note:** Run this step *only if you encounter a `torch.load` error*
 
 ```bash
 sed -i "s/map_location='cpu')/map_location='cpu', weights_only=False)/" /content/multiqr-hackathon/src/yolov9/models/experimental.py
@@ -104,7 +105,10 @@ If you face issues running the provided scripts, you can use the development not
     ```
     You can then use the new `best.pt` weights of the model for inference as specified in `Step 2. How To run Inference`
     
-3.  **Patch for PyTorch Compatibility:**  
+3.  **Patch for PyTorch Compatibility:**
+   
+     > **Note:** Run this step *only if you encounter a `torch.load` error*
+   
     Run the following commands before starting training to fix `torch.load` compatibility issues:
 
     ```bash
