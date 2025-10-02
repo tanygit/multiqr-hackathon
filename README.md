@@ -42,19 +42,18 @@ Follow these steps to set up the environment and prepare the project.
 
 A pre-trained `best.pt` model is included in the `trained_models/` directory. You can use it directly to generate predictions.
 
+The inference script requires to specify the input image folder, the output JSON path, and the path to the model weights.
+
+```bash
+python infer.py --input <path_to_images_folder> --output <path_to_save_json> --weights <path_to_model.pt>
+```
+
 ### Important Note
-Before running inference, apply the following patch to fix the `torch.load` error related to `map_location`:
+Apply the following patch to fix the `torch.load` error related to `map_location`:
 
 ```bash
 !sed -i "s/map_location='cpu')/map_location='cpu', weights_only=False)/" /content/multiqr-hackathon/src/yolov9/models/experimental.py
 ```
-
-### Command Format
-The inference script requires you to specify the input image folder, the output JSON path, and the path to the model weights.
-```bash
-python infer.py --input <path_to_images_folder> --output <path_to_save_json> --weights <path_to_model.pt>
-```
----
 ---
 
 ## 3. Running via Notebooks 
