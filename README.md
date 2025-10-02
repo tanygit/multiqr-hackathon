@@ -46,7 +46,6 @@ A pre-trained `best.pt` model is included in the `trained_models/` directory. Yo
 Before running inference, apply the following patch to fix the `torch.load` error related to `map_location`:
 
 ```bash
-# This command patches the file to fix the torch.load error
 !sed -i "s/map_location='cpu')/map_location='cpu', weights_only=False)/" /content/multiqr-hackathon/src/yolov9/models/experimental.py
 ```
 
